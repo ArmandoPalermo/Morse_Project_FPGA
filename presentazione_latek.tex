@@ -1,0 +1,250 @@
+\documentclass[9pt]{beamer}
+% Created By Gouthaman KG
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Use roboto Font (recommended)
+\usepackage[sfdefault]{roboto}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Define where theme files are located. ('/styles')
+\usepackage{styles/fluxmacros}
+\usefolder{styles}
+% Use Flux theme v0.1 beta
+% Available style: asphalt, blue, red, green, gray 
+\usetheme[style=asphalt]{flux}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Extra packages for the demo:
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{ragged2e}
+\usepackage{schemabloc}
+\usepackage{hyperref}
+\usebackgroundtemplate{
+\includegraphics[width=\paperwidth,height=\paperheight]{assets/background.jpg}}%change this to your preferred background for the presentation.
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Informations
+
+\title{Sistema Morse su FPGA: \\
+progetto di codifica e decodifica}
+
+
+\author{Colasanti Giulia, Palermo Armando }
+\institute{}
+\titlegraphic{Logo_unipg.png} %change this to your preferred logo or image(the image is located on the top right corner).
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\begin{document}
+
+\begin{frame} 
+\centering 
+
+\begin{figure}[H] 
+\centering 
+\includegraphics[width=0.2\linewidth]{Logo_unipg.png}
+\end{figure} 
+\textbf{\Huge SISTEMA MORSE SU FPGA: \\ 
+}
+\huge PROGETTO DI CODIFICA E DECODIFCA \\
+\vspace{0.5cm}
+\small \textbf{INGEGNERIA INFORMATICA E ROBOTICA} \\
+\small SISTEMI ELETTRONICI EMBEDDED \\
+\vspace{0.5cm}
+\tiny A.A 2024/2025 
+\end{frame}
+% Generate title page
+
+
+\begin{frame}
+
+ \frametitle{TABLE OF CONTENTS}
+ \tableofcontents
+\end{frame}
+
+\section{Introduction} %the content in the section will be displayed in the table of contents
+\begin{frame}{Introduction: Morse code}%the content in the frame will be displayed as the title of the page
+\begin{columns}
+\column{0.45\textwidth} 
+\begin{figure}
+           \includegraphics[width=0.8\linewidth]{telegrrafo.jpg}
+       \end{figure}
+\column{0.55\textwidth} 
+Developed in the 19th century by Samuel Morse and Alfred Vail. It was mainly used in the \textbf{telegraph} for long-distance communications.
+\end{columns}
+\vspace{2mm}
+
+\begin{columns}
+\column{0.65\textwidth} 
+Purposes of use: 
+\begin{itemize} 
+\item Military field 
+\item Maritime field 
+\item Today it is useful in specific contexts such as the medical sector 
+\end{itemize}
+\column{0.35\textwidth} 
+\begin{figure}
+           \includegraphics[width=1\linewidth]{morse-code.jpg}
+\end{figure}
+\end{columns}
+
+    
+\end{frame}
+
+\section{Project goal}
+\begin{frame}{Project goal}
+Implementation of a Morse code encoding and decoding system using an \textbf{FPGA Artix-7 by Xilinx}. The resources provided by the \textbf{Basys3} board will be used as input/output.
+The Hardware is programmed using \textbf{Vivado} Software.
+\begin{columns}
+\column{0.5\textwidth} 
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{FPGABasys.png}
+    \label{fig:enter-label}
+\end{figure}
+\column{0.5\textwidth} 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{sw.png}
+    \label{fig:enter-label}
+\end{figure}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Project goal}
+
+\begin{figure}
+           \centering
+           
+           \includegraphics[width=\linewidth]{FPGASchema.png}
+\end{figure}
+
+\end{frame}
+
+
+
+
+
+\section{Project Structure}
+
+\begin{frame}{Project Structure- RTL}
+    \textbf{Register Transfer Level}: 
+    \begin{itemize}
+        \item How data moves between registers;
+        \item What logical or arithmetic operations are performed on the data during transfers;
+    \end{itemize}
+    
+
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=\linewidth]{RTL.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Project Structure - Encoding }
+Two modules:
+\begin{itemize}
+    \item \textbf{Mapping$\_$SW$\_$Morse}, It converts the binary input provided through the switches into an identifying Morse code encoding.
+    \begin{center}
+        \emph{e.g. \textcolor{red}{D} → 01000100 → 1101010000000000 →   \textcolor{red}{- . .}}
+    \end{center}
+    
+    \item \textbf{Encoder$\_$LED},It makes the LED blink based on the value obtained from the mapping module mentioned above.
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=0.9\linewidth]{exBlink.png}
+    \end{figure}
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Project Structure -Encoder$\_$LED Code}
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=0.6\linewidth]{ENCODERcode.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Project Structure - Decoding}
+    Three modules:
+    \begin{itemize}
+        \item \textbf{DebounceControlModule}, manages the unwanted mechanical bounce of the pushbuttons;
+        \item \textbf{Decoder\_Morse}, interpret the input signals from the pushbuttons and convert them into binary strings (encoding as seen in the previous slides);
+        \item \textbf{Segment\_Display}, performs the mapping from the Morse code entered using the pushbuttons into a binary string for turning on the 7-segment display.
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Project Structure -  DebounceControlModule code}
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=\linewidth]{debounce codice .png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Project Structure -  DebounceControlModule Simulation}
+    \begin{center}
+        \Huge Simulated Debounce $\rightarrow$ 1 us
+    \end{center}
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=\linewidth]{simulazDeboun.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Project Structure - Flow Diagram Decoder\_Morse }
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=0.41\linewidth]{fotolflowgius.png}
+    \end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}{Project Structure - Clock Division}
+    \begin{center}
+        \Huge 100 MHz $\rightarrow$ 10 MHz
+    \end{center}
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=\linewidth]{ClockDivision.png}
+    \end{figure}
+    \begin{figure}
+           \centering
+           
+           \includegraphics[width=\linewidth]{powerresults.png}
+    \end{figure}
+\end{frame}
+
+\section{Conclusions}
+\begin{frame}{Conclusions and Future Developments}
+    Possible improvements:
+    \begin{itemize}
+        \item Development of UART connection for the conversion of multiple characters simultaneously..
+        \item Clock gating to prevent the unused mode from consuming power.
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{}
+   \centering
+   \Huge THANK YOU FOR YOUR ATTENTION
+\centering
+\end{frame}
+\end{document}

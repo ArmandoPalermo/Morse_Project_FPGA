@@ -1,0 +1,11 @@
+0.7
+2020.2
+May 22 2024
+19:03:11
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/DebounceControlModule.vhd,1736162350,vhdl,,,,debouncecontrolmodule,,,,,,,,
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/Decoder_Morse.vhd,1736164946,vhdl,,,,decoder_morse,,,,,,,,
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/Divisore_clk.vhd,1736164777,vhdl,,,,divisore_clk,,,,,,,,
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/Encoder_LED.vhd,1736164930,vhdl,,,,encoder_led,,,,,,,,
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/Mapping_SW_Morse.vhd,1736162351,vhdl,,,,mapping_sw_morse,,,,,,,,
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/Segment_Display.vhd,1736162351,vhdl,,,,segment_display,,,,,,,,
+C:/Users/arman/VivadoProjects/Morse_System/Morse_System.srcs/sources_1/new/TOP_levelModule.vhd,1736162351,vhdl,,,,top_levelmodule,,,,,,,,

@@ -1,0 +1,261 @@
+\documentclass[journal,twoside,web]{ieeecolor}
+\usepackage{jsen}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{wrapfig}
+\usepackage{xcolor}
+\usepackage{amsmath} % Necessario per \text{}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\markboth{\journalname}
+{Author \MakeLowercase{\textit{et al.}}: Sistema Morse su FPGA: Progetto di Codifica e Decodifica }
+\definecolor{abstractbg}{rgb}{0.89804,0.94510,0.83137}
+\setlength{\fboxrule}{0pt}
+\setlength{\fboxsep}{0pt}
+
+
+
+\begin{document}
+\title{Sistema Morse su FPGA:\\progetto di codifica e decodifica}
+\author{Giulia Colasanti, Armando Palermo }
+
+\IEEEtitleabstractindextext{
+\fcolorbox{abstractbg}{abstractbg}{%
+\begin{minipage}{\textwidth}%
+\begin{wrapfigure}[12]{r}{2.3in}%
+\includegraphics[width=2.2in]{R.jpg}%
+\end{wrapfigure}%
+\begin{abstract}
+Il seguente lavoro presenta l’implementazione di un sistema di codifica e decodifica del codice Morse utilizzando il dispositivo logico programmabile FPGA (Field Programmable Gate Array) Artix-7 di Xilinx, implementato sulla scheda Basys 3.
+L’obiettivo principale è stato quello di sfruttare appieno i componenti hardware della scheda, come switch, LED, push button e display a 7 segmenti, per creare un flusso integrato e funzionale che unisse input, elaborazione e output. 
+Questo lavoro mostra come le FPGA possano essere utilizzate per applicazioni semplici ma utili, contribuendo a migliorare l’accessibilità e l’inclusione in ambiti tecnologici e comunicativi.Un elemento aggiuntivo, infatti, è il suo possibile utilizzo come strumento di supporto per persone con disabilità motorie. La codifica del codice Morse è resa accessibile attraverso segnali visivi, come l’illuminazione dei LED e la visualizzazione delle lettere e dei numeri sul display a 7 segmenti, offrendo un’alternativa alla tradizionale trasmissione sonora.
+
+\end{abstract}
+\end{minipage}}}
+
+\maketitle
+
+\section{Introduzione}
+\label{sec:introduction}
+\IEEEPARstart{I}{l} codice Morse \cite{WikiMorse}, sviluppato nel XIX secolo da Samuel Morse e Alfred Vail, ha rappresentato una pietra miliare nella storia della comunicazione, permettendo la trasmissione di messaggi tramite impulsi di lunghezza variabile, che corrispondono a punti e linee.
+Utilizzato principalmente nel telegrafo, divenne rapidamente lo standard per le comunicazioni a lunga distanza, in particolare in ambito marittimo, e rimase in uso fino al 1999. Il 24 maggio 1844, il primo messaggio telegrafico, \textit{``What hath God wrought?" (Cosa ha fatto Dio?)}, fu inviato sulla linea telegrafica tra Baltimora e Washington, segnando un momento cruciale nell'evoluzione della comunicazione.
+Nonostante l'alfabeto Morse sia stato in gran parte sostituito da tecnologie più moderne nella comunicazione quotidiana, continua a essere utilizzato in contesti specifici, come nel settore medico, grazie alla sua semplicità e affidabilità. Quest'ultimo si rivela particolarmente utile per i pazienti affetti da Malattia del Motoneurone (MND) \cite{WIMORSE}, poiché richiede solo movimenti minimi, come quelli delle dita, per comunicare. Con il progredire della malattia, i pazienti spesso perdono la capacità di parlare, ma continuano a mantenere un certo controllo motorio nelle mani, rendendo il codice Morse una soluzione ideale per la comunicazione.Recenti sviluppi nelle tecnologie IoT hanno reso possibile tracciare il movimento delle dita in maniera semplice ed efficace, senza bisogno di dispositivi complessi o costosi, come nel caso del tracciamento oculare utilizzato da Stephen Hawking.
+In questo contesto, l' FPGA può essere coinvolta come dispositivo di supporto per la tramutazione, in codice morse,  dei segnali provenienti dai minimi movimenti dei pazienti.La sequenza di punti e linee verrà successivamente tradotta in un testo semplificando così la comunicazione.
+Il progetto in questione ha come obiettivo la realizzazione di un sistema che, sfruttando la capacità di elaborazione dell'FPGA Artix-7 della Xilinx, permetta di decodificare e codificare codice Morse in caratteri alfanumerici (lettere e numeri) e viceversa.In pratica, il sistema agirà come un encoder, che traduce la sequenza di punti e linee, presa in ingresso, in caratteri alfanumerici, e come un decoder, che interpreta un carattere alfanumerico e lo converte nel formato Morse.
+La realizzazione del sistema è stata possibile grazie all’uso del software Vivado \cite{Vivado}, uno strumento essenziale utile alla progettazione e simulazione di circuiti digitali, che permette di scrivere, testare e sintetizzare codice VHDL (Very High Speed Integrated Circuit Hardware Description Language) \cite{VHDL}, tramite il quale si possono descrivere circuiti digitali a basso livello.Il risultato finale è un encoder-decoder che sfrutta esclusivamente i componenti integrati della piattaforma Basys 3, senza necessitare di periferiche esterne.\\
+I contributi principali di questo progetto sono:
+\begin{itemize}
+    \item Traduzione Bidirezionale del Codice Morse: Implementazione di un sistema in grado di codificare caratteri alfanumerici in codice Morse e di decodificare il codice Morse nei corrispondenti caratteri o numeri; 
+    \item Utilizzo delle risorse hardware dell’FPGA: è stata utilizzata un’interfaccia utente semplice e intuitiva, che consente di sfruttare unicamente le risorse messe a disposizione dalla piattaforma, permettendo all’utente di usare come input gli switches e i pushbuttons. ll sistema è progettato per gestire un singolo carattere o numero alla volta, semplificando la visualizzazione sul display a 7 segmenti.Questo approccio elimina la necessità di periferiche esterne;
+    \item Uso del linguaggio VHDL: Il progetto rappresenta un esempio pratico e accessibile a tutti, dimostrando le capacità del linguaggio VHDL nel progettare sistemi che elaborano segnali in tempo reale e enfatizzando l'importanza di una progettazione basata sull’hardware.Il sistema realizzato infatti elabora il codice Morse in tempo reale, garantendo che la codifica e la decodifica avvengano quasi istantaneamente;
+    \item Scalabilità: questa implementazione funge da base per lo sviluppo di sistemi di comunicazione avanzati.L’architettura del sistema è scalabile in quanto organizzata in moduli separati, permettendone una facile estensione;
+\end{itemize}
+
+Il presente documento è organizzato come segue. Nella Sezione 2 vengono analizzati i lavori correlati. Nella Sezione 3 viene descritta l’implementazione del progetto. Nella Sezione 4 sono mostrati i risultati sperimentali e nella Sezione 5 le conclusioni.
+
+
+
+
+
+\section{Lavori correlati}
+Nell’ambito della codifica/decodifica del codice Morse, diversi studi si sono focalizzati sull'uso delle FPGA in sistemi di comunicazione accessibili, come strumenti di supporto, a persone con disabilità motorie. In questa sezione, verranno descritti due  studi che hanno fornito ispirazione e spunti per lo sviluppo del nostro progetto. Attraverso l'analisi di questi lavori, abbiamo compreso che la codifica e la decodifica Morse continuano a mantenere una notevole utilità anche oggi, nonostante non venga più utilizzata con la stessa diffusione di un tempo.
+Nell’articolo  \textit{“FPGA Based Morse Code Communicator for Visual and Speech Impaired People using Basys-3”} 
+
+\cite{articolo1}, il sistema progettato ha specifiche molto simili a quelle del nostro progetto, in particolar modo per quanto riguarda la parte di decodifica da Morse a carattere/numero.Anche in questo caso è stato utilizzato il display a 7 segmenti per la visualizzazione del risultato. Dall'analisi, emerge che la gestione del clock nel loro sistema è stata implementata in maniera manuale, con l'utente responsabile dell'attivazione e disattivazione del clock tramite un input fisico. Nel nostro caso, invece, abbiamo utilizzato un clock automatico, ovvero il clock nativo dell'FPGA. Il vantaggio di questa scelta risiede nella capacità del clock automatico di fornire una temporizzazione stabile e coerente, senza la necessità dell'intervento umano.Inoltre, abbiamo considerato anche la gestione del debouncing dei pulsanti, un aspetto che non è stato affrontato nello studio precedente. Il debouncing è fondamentale per evitare che il sistema interpreti  erroneamente i segnali di ingresso a causa dei rimbalzi elettrici dei pulsanti, migliorando così l'affidabilità e la precisione del sistema.\\
+Nel secondo articolo \textit{“FPGA-based communication interface for persons with motor neuron diseases”}, \cite{articolo2} lo scopo principale rimane il medesimo, tuttavia l’argomento viene affrontato in maniera più sofisticata e approfondita. Il cuore del sistema sono i sensori MEMS (micro electro-mechanical systems) utilizzati per rilevare i micro movimenti muscolari. Il segnale attivato dal sensore 1 è interpretato come punto, mentre il segnale dal sensore 2 come una linea. Questi vengono inviati all’FPGA che li elabora, eliminando eventuali rumori e segnali indesiderati. I caratteri decodificati vengono poi visualizzati su un display LCD.
+Concludendo quindi, come dimostra il secondo articolo, la decodifica Morse trova ancora oggi applicazioni concrete nella realtà, tramite sistemi basati su FPGA. Il nostro progetto rimane comunque un sistema di base, sviluppato con uno scopo puramente didattico con l'obiettivo di apprendere i principi della progettazione su FPGA.
+
+
+\section{Descrizione del progetto}
+L’obiettivo del  progetto è la realizzazione di un codificatore/decodificatore Morse. Il sistema è diviso in due modalità:
+\begin{itemize}
+    \item Modalità di codifica: dove il sistema converte i caratteri alfanumerici in codice Morse
+    \item Modalità di decodifica: dove il sistema interpreta i segnali Morse e li converte in caratteri o numeri.
+\end{itemize}
+
+Per quanto riguarda la gestione del clock, si è scelto di non utilizzare quello nativo dell’FPGA. Al suo posto, tramite un modulo, \texttt{Divisore$\_$clk}, è stato generato un clock da 10 MHz. Questa scelta è stata adottata con l’obiettivo di limitare il consumo di potenza dinamico, come verrà descritto nella sezione dedicata ai risultati.
+
+\subsection{Codifica}
+ Questa modalità è divisa in 2 moduli: \texttt{Mapping$\_$SW$\_$Morse}  ed \texttt{Encoder$\_$LED}. L'idea è quella far inserire all’utente un carattere alfanumerico in formato binario, che successivamente verrà tradotto in codice  Morse dal primo modulo. Tale codice viene usato per far lampeggiare un LED dal secondo modulo.$\\$
+\subsubsection{\text{Mapping$\_$SW$\_$Morse}}
+Il modulo prende in input un vettore di 8 bit, \textit{switchIn}  (STD$\_$LOGIC$\_$VECTOR), il cui valore è definito da 8 switch presenti sulla scheda Basys 3. La configurazione degli switch rappresenta il carattere o numero in formato binario.
+
+\begin{center}
+   \emph{es. D → 01000100}
+\end{center}
+
+La logica è definita in un processo che viene eseguito ogni volta che l’input cambia. Al suo interno tramite una struttura \emph{case} il valore di switchIn viene confrontato con i possibili valori, binari identificativi dei caratteri che vanno da A-Z e dei numeri da 0-9. Se switchIn  corrisponde ad uno dei valori definiti nel case il modulo assegna all’output il relativo codice Morse(in formato binario), altrimenti viene assegnato un valore di default.$\\$
+L’uscita \textit{mappedMorse} è un vettore a 16 bit in binario dove ‘1’ corrisponde ad un punto , ‘11’ a una linea e ‘0’ sono gli spazi tra i simboli
+\begin{center}
+   \emph{es. D → 01000100 → 1101010000000000 →   - . .}
+\end{center}
+ 
+La sua dimensione  è legata alla necessità di gestire correttamente gli spazi tra le sequenze, di mantenere una lunghezza uniforme per tutti i caratteri Morse e di regolare correttamente la temporizzazione dell’accensione del LED attraverso il modulo \textit{Encoder$\_$LED}.
+\newpage
+\subsubsection{\text{Encoder$\_$LED}}
+Lo scopo del modulo è l’accensione e lo spegnimento ad intermittenza del LED in base al carattere/numero Morse che si deve rappresentare. L’input, \textit{morse$\_$code}(STD$\_$LOGIC$\_$VECTOR a 16 bit) , rappresenta una sequenza di codifica Morse ottenuta dal modulo precedente.$\\$
+Il comportamento principale avviene all’interno di un processo, attivato dal segnale di clock.$\\$
+Morse$\_$code  viene scandito bit per bit. Quando il bit è ‘1’ il led viene acceso per un tempo prestabilito, se invece è ’0’ il led resta spento per un diverso periodo prefissato. La temporizzazione viene gestita attraverso due variabili \textit{wait$\_$timer$\_$on o wait$\_$timer$\_$off}, utilizzate come contatori. I loro valori massimi sono stati definiti sulla base di un clock di 10 MHz, e sono stati calcolati secondo la seguente formula.
+
+\begin{center}
+    \begin{equation}
+        Timer = \frac{DurataDesiderata(secondi)}{DurataCiclo(secondi)}
+    \end{equation}
+    dove
+    \begin{equation}
+        DurataCiclo = \frac{1}{FrequenzaClock (Hz)}
+    \end{equation}
+\end{center}
+
+$\\\\$		
+Sono stati decisi i seguenti tempi:
+\begin{itemize}
+    \item durata accensione LED per un punto: 0,5s ( Timer : 5 mln di cicli) 
+    \item durata accensione LED per una linea: 1s ( Timer : 10 mln di cicli)
+    \item durata spegnimento LED per uno spazio: 0,3s (Timer: 3 mlm di cicli)
+\end{itemize}
+$\\$
+Se il bit letto è 1 viene incrementato wait$\_$timer$\_$on ad ogni ciclo di clock e quando raggiunge il valore limite (5 mln di cicli) il LED si spegne, il timer è resettato e si passa al controllo del successivo bit; se il bit è ancora ‘1’, il LED si riaccende per un altro periodo di  0,5s. In caso contrario, il LED rimane spento fino a quando la variabile wait$\_$timer$\_$off non raggiunge il valore massimo (3 mln di cicli). Per rappresentare una linea, il LED viene trattato come se si accendesse per due periodi consecutivi di 0,5 secondi, separati da uno spegnimento della durata di un singolo ciclo di clock (100 nanosecondi). Questo spegnimento, essendo così breve, risulta impercettibile all’occhio umano, creando l’impressione che il LED rimanga acceso ininterrottamente per un intero secondo.
+
+\subsection{Decodifica}
+Questa modalità è divisa in 3 moduli: \texttt{Decoder\_SW\_Morse}, \texttt{DebounceControlModule} e \texttt{Segment\_Display}. In questa situazione l’utente, tramite i pushbutton, compone la sequenza Morse che viene successivamente decodificata nel carattere/numero corrispondente sul display a 7 segmenti.$\\$
+
+
+\subsubsection{\text{Decoder$\_$SW$\_$Morse}}
+
+Questo è il modulo principale che interpreta i segnali in ingresso, \textit{pushIn} (STD$\_$LOGIC) traducendoli in codice binario, \textit{mappedBinary} (STD$\_$LOGIC$\_$VECTOR di 16 bit) per rappresentare i punti e le linee.$\\$
+La logica prevede un processo che viene attivato ad ogni ciclo di clock. Ad ogni fronte di salita del clock se pushIn = 1, viene incrementato un contatore, \textit{pushTimerON}, che misura la durata del tempo in cui il pulsante rimane premuto. Quando è rilasciato, si incrementa  \textit{pushTimerOFF}. Successivamente sarà aggiunto il simbolo Morse corrispondente, tramite un controllo su \textit{pushTimerON}:
+$\\\\$
+\begin{itemize}
+    \item se pushTimerON $>$ 5 mln (0,5s), corrisponde ad una linea e al vettore d’uscita  viene aggiunto ‘110’
+    \item se pushTimerON $<$ 5 mln (0,5s), corrisponde ad un punto ed al vettore d’uscita  viene aggiunto ‘10’.
+  
+\end{itemize}
+$\\$
+Lo zero sta ad indicare lo spazio tra i simboli. Questo è coerente con la struttura del vettore utilizzato per rappresentare il codice Morse, come descritto in precedenza (\textbf{vedi II.2}).$\\$
+Per differenziare le varie sequenze di simboli e quindi i caratteri, il processo prevede un ulteriore controllo che tiene conto del tempo di inattività del pulsante. Dopo 0,7  secondi di inattività la sequenza è considerata finita.
+$\\$
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=0.78\linewidth]{flowChart.png} 
+\caption{Flow Chart del modulo Decoder$\_$SW$\_$Morse} \label{fig:esempio} \end{figure}
+
+\newpage
+\subsubsection{\text{DebounceControlModule}}
+L’utilizzo dei pushbutton può portare ad effetti indesiderati dovuti a dei rimbalzi (bounce) , ovvero delle oscillazioni che si verificano quando il pulsante viene premuto o rilasciato, causate dalla sua natura meccanica \cite{wikiRimbalzo}. Il sistema quindi potrebbe interpretare erroneamente una singola pressione del pulsante come multiple.$\\$
+Lo scopo del seguente modulo è quello di  filtrare i rimbalzi del pulsante, garantendo così la stabilità del segnale di uscita (\textit{btn$\_$out}). Il contatore (\textit{counter}) viene utilizzato per verificare che il pulsante rimanga stabile per un periodo di tempo specificato (20 ms) prima di aggiornare lo stato stabilizzato (\textit{btn$\_$reg}). Se il pulsante cambia stato, il contatore viene resettato, altrimenti viene incrementato fino a raggiungere il valore massimo (\textit{DEBOUNCE$\_$COUNT$\_$MAX}). Solo quando il contatore raggiunge questo valore, lo stato del pulsante viene considerato stabile e aggiornato.$\\$
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{debounce.png} 
+\caption{Processo del modulo DebounceControlModule} \label{fig:esempio} 
+\end{figure}
+\subsubsection{\text{Segment$\_$Display}}
+
+La logica è simile a quella analizzata nel modulo Mapping$\_$SW$\_$Morse (\textbf{vedi II.2}). In base a un input binario Morse (un vettore di 16 bit), ottenuto dal Decoder$\_$Morse, viene mappata una sequenza specifica di bit per indicare quali segmenti devono essere accesi per visualizzare correttamente il carattere associato.
+
+\begin{center}
+     \textit{es.   "1101010000000000" → 1000010 →  d}
+\end{center}
+
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{Seven-segment-display.png} 
+\caption{Funzionamento Display a 7 segmenti} \label{fig:esempio} 
+\end{figure}
+
+Se il valore di binaryMorse non corrisponde a un valore mappato, tutti i segmenti vengono spenti.Il controllo degli anodi è fisso ("1110"), il che significa che solo un display (il primo) è attivo.
+
+
+\subsection*{}
+
+I moduli elencati vengono aggregati in un unico modulo definito TOP$\_$levelModule. Ognuno di essi è instanziato come componente e sono messi in comunicazione tramite un port mapping. 
+Il \textit{port mapping} \cite{portMap} in VHDL è il processo mediante il quale si collegano i segnali interni del modulo di livello superiore (o del sistema) alle porte di input e output dei moduli instanziati, stabilendo così la comunicazione tra di essi.
+
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{RTL.png} 
+\caption{Schema RTL modulo TOP$\_$levelModule} \label{fig:esempio} 
+\end{figure}
+
+\section{Risultati}
+Come discusso nelle sezioni precedenti, per la realizzazione di questo progetto è sufficiente utilizzare esclusivamente le risorse offerte dalla scheda Basys 3, che integra un FPGA della famiglia Artix-7 di Xilinx.
+Il sistema implementato supporta due modalità operative differenti a seconda degli input attivati , switch o  pushbutton , producendo di conseguenza output distinti, rappresentati rispettivamente dai LED o dal display a 7 segmenti.
+
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{FPGAd.jpg} 
+\caption{Decodifica lettera d su FPGA} \label{fig:esempio} 
+\end{figure}
+\newpage
+Tramite il file di constrait , abbiamo definito:
+\begin{itemize}
+    \item per codifica 8 switch, V16 a W13 , e il LED mappato su pin U16;
+    \item per decodifica il pushbutton centrale corrispondente al pin U18, i pin da W7 a U7 per il display e gli anodi da U2 a W4, configurati in maniera tale da visualizzare solo cifra più a destra;
+    \item la temporizzazione viene gestita da un clock generato (10 MHz) partendo da quello nativo (100MHz) mappato sul pin W5;
+\end{itemize}$\\$
+
+In figura si riporta l'intera configurazione
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{basys.png} 
+\caption{Configurazione file .xdc} \label{fig:esempio} 
+\end{figure}
+
+Di seguito vengono forniti i dati relativi alle risorse utilizzate dall’FPGA dopo l’implementazione e i dati legati al consumo di potenza.
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{risorse.png} 
+\caption{Risorse utilizzate} \label{fig:esempio} 
+\end{figure}
+
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{power1.png} 
+\caption{Consumo di potenza a 100 Mhz} \label{fig:esempio} 
+\end{figure}
+
+\begin{figure}[h] 
+\centering 
+\includegraphics[width=\linewidth]{power2.png} 
+\caption{Consumo di potenza a 10 Mhz} \label{fig:esempio} 
+\end{figure}
+$\\\\$
+In figura 8 la frequenza di clock utilizzata è 100MHz, ovvero quella nativa dell’FPGA utilizzata.
+La potenza statica costituisce la parte predominante del consumo energetico,, mentre la potenza dinamica è molto contenuta. Il principale contributo di quest’ultima è dato dal clock(51\%).$\\$
+In figura 9 la frequenza è stata ridotta dal modulo Divisore$\_$clk a 10 MHz. Sebbene la potenza statica resti il contributo maggiore, quella dinamica è diminuita. Ciò è dovuto al fatto che, diminuendo la frequenza di clock, aumenta il tempo durante il quale il segnale rimane stabile (livello alto o basso), rendendo le transizioni meno frequenti.
+
+\newpage
+\section{Conclusioni}
+I test effettuati hanno dimostrato il corretto funzionamento di entrambe le modalità. Il sistema risponde coerentemente agli input, gestendo eventuali rimbalzi meccanici dei pushbutton.
+Il progetto è stato sviluppato con scopi puramente didattici, ma sono certamente possibili ulteriori miglioramenti, come la connessione dell'FPGA con dispositivi esterni tramite UART per gestire l'inserimento di un intero testo e la rappresentazione di caratteri che non possono essere visualizzati su un display a 7 segmenti. Inoltre, sarebbe possibile ridurre ulteriormente il consumo dinamico limitando l'attività del clock nei moduli non attivi.
+
+
+
+
+
+
+
+
+
+
+
+
+\bibliography{bibliografia}
+\bibliographystyle{unsrt}
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

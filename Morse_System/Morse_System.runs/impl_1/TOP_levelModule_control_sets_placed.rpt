@@ -1,0 +1,88 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.1 (win64) Build 5076996 Wed May 22 18:37:14 MDT 2024
+| Date         : Tue Jan 14 19:24:58 2025
+| Host         : Armando running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file TOP_levelModule_control_sets_placed.rpt
+| Design       : TOP_levelModule
+| Device       : xc7a35t
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    10 |
+|    Minimum number of control sets                        |    10 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    40 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    10 |
+| >= 0 to < 4        |     2 |
+| >= 4 to < 6        |     2 |
+| >= 6 to < 8        |     0 |
+| >= 8 to < 10       |     0 |
+| >= 10 to < 12      |     0 |
+| >= 12 to < 14      |     0 |
+| >= 14 to < 16      |     0 |
+| >= 16              |     6 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              23 |           10 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              49 |           24 |
+| Yes          | No                    | No                     |              17 |            8 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |              87 |           26 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++----------------+-----------------------------------------------------------------+-----------------------------------------------+------------------+----------------+--------------+
+|  Clock Signal  |                          Enable Signal                          |                Set/Reset Signal               | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------+-----------------------------------------------------------------+-----------------------------------------------+------------------+----------------+--------------+
+|  clk_int_BUFG  | DebounceControlModule_insy/btn_reg                              |                                               |                1 |              1 |         1.00 |
+|  clk_int_BUFG  | Encoder_LED_inst/led_i_2_n_0                                    | Encoder_LED_inst/led_i_1_n_0                  |                1 |              1 |         1.00 |
+|  clk_int_BUFG  | Decoser_inst/InsertedBits_0                                     | Decoser_inst/mappedBinary[15]_i_1_n_0         |                3 |              4 |         1.33 |
+|  clk_IBUF_BUFG |                                                                 |                                               |                1 |              5 |         5.00 |
+|  clk_int_BUFG  | Decoser_inst/mappedBinary[15]_i_1_n_0                           |                                               |                7 |             16 |         2.29 |
+|  clk_int_BUFG  |                                                                 |                                               |                9 |             18 |         2.00 |
+|  clk_int_BUFG  | DebounceControlModule_insy/btn_out_int                          | Decoser_inst/pushTimerON[0]_i_1_n_0           |                6 |             24 |         4.00 |
+|  clk_int_BUFG  | Decoser_inst/start                                              | DebounceControlModule_insy/btn_out_int        |                8 |             26 |         3.25 |
+|  clk_int_BUFG  | DebounceControlModule_insy/counter0_inferred__0/i__carry__2_n_3 | DebounceControlModule_insy/counter[0]_i_1_n_0 |                8 |             32 |         4.00 |
+|  clk_int_BUFG  |                                                                 | Encoder_LED_inst/wait_timer_on[22]_i_1_n_0    |               24 |             49 |         2.04 |
++----------------+-----------------------------------------------------------------+-----------------------------------------------+------------------+----------------+--------------+
+
+
